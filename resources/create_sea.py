@@ -14,8 +14,8 @@ with open(filename, newline='') as f:
     reader = csv.reader(f)
     
     try:
-        # занесение csv в [ список\list ]
-        sea = list(reader)
+      # sea = list(reader)  # занесение csv в [список]
+        sea = tuple(reader) # занесение csv в (кортеж)
         
 
             
