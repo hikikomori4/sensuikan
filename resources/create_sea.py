@@ -18,5 +18,4 @@ with open(filename, newline='') as f:
     except csv.Error as e:
         sys.exit('file {}, line {}: {}'.format(filename, reader.line_num, e))
 
-
-
+ 
