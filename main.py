@@ -22,18 +22,18 @@ if name in people:
 
 
 tanks = {
-    {'differential_1': 
+    'differential_1': 
         {
           'name': 'Носовая дифферентная цистерна',
           'Capacity': 1000,
           'state': 'цистерна в порядке' 
-        }},
-    {'differential_2': 
+        },
+    'differential_2': 
         {
           'name': 'Кормовая дифферентная цистерна',
           'Capacity': 1000,
           'state': 'цистерна в порядке' 
-        }}
+        }
     }
 
-print(tanks['differential_2']['name'])
+print(tanks['differential_1']['name'])
