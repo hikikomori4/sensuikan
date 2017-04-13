@@ -1,69 +1,156 @@
 #!/usr/bin/python3
 # coding: utf-8
 
-
-uboat
-
-class Uboat(object):
-    def measurements(self):
-        # Главные размерения субмарины
-        length =
-        width =
-        height =
-        tonnage =
-        tonnage_sub =
-        draft =   # осадка
-
-
-    def complement(self):
-        # Комплектация команды
-        pass
-
-    def ttx(self):
-        # Тактико-технические характеристики
-        
-        depth_safe =
-        depth_work =
-        depth_max =
-        depth_dsg =
-        
-class Compartment(object, Uboat):
-    # Отсеки от носа к корме
-    pass
-    
-
-    def part1(self):
-        # Отсек
-        pass
-         
-    def part2(self):
-        # Отсек
-        pass
-         
-    def part3(self):
-        # Отсек
-        pass
-         
-    def part4(self):
-        # Отсек
-        pass
-         
-    def part5(self):
-        # Отсек
-        pass
-         
-    def part6(self):
-        # Отсек
-        pass
-         
-    def part7(self):
-        # Отсек
-        pass
-         
-        
-        
-
-
 if __name__ == '__main__':
-    print('Модуль описывает субмарину, и отдельно не запускается!')
+    print('\nМодуль субмарина отдельно не запускается!\n')
+    exit(1)
+
+
+
+uboatname = 'Тип "С" Средняя'
+uboatseries = 'IX-бис'
+
+
+  
+       
+
+
+########################################################
+
+tanks = {
+    'different1': 
+        {
+          'name': 'Носовая дифферентная цистерна',
+          'Capacity': 1000,
+          'state': 'цистерна в порядке' 
+        },
+    'different2': 
+        {
+          'name': 'Кормовая дифферентная цистерна',
+          'Capacity': 1000,
+          'state': 'цистерна в порядке' 
+        },
+    'equalizing': 
+        {
+          'name': 'Уравнительная цистерна',
+          'Capacity': 1000,
+          'state': 'цистерна в порядке' 
+        },
+    'quickdive': 
+        {
+          'name': 'Цистерна быстрого погружения',
+          'Capacity': 1000,
+          'state': 'цистерна в порядке' 
+        },
+    'mainballast': 
+        {
+          'name': 'Цистерна главного балласта (ЦГБ)',
+          'Capacity': 1000,
+          'state': 'цистерна в порядке' 
+        },
+    'torpedo': 
+        {
+          'name': 'Торпедозаместительные цистерны',
+          'Capacity': 1000,
+          'state': 'цистерна в порядке' 
+        },
+    'ringshaped': 
+        {
+          'name': 'Цистерны кольцевого зазора',
+          'Capacity': 1000,
+          'state': 'цистерна в порядке' 
+        },
+    'fuel_tank1': 
+        {
+          'name': 'Топливная цистерна 1',
+          'Capacity': 1000,
+          'state': 'цистерна в порядке' 
+        },
+    'fuel_tank2': 
+        {
+          'name': 'Топливная цистерна 2',
+          'Capacity': 1000,
+          'state': 'цистерна в порядке' 
+        }
+    }
+
+
+########################################################
+
+
+compartments = [
+    {
+          'No': 0,
+        'name': 'Боевая рубка',
+        'desc': '',
+       'param': '',
+       'truim': False,
+       'state': 'отсек в порядке'
+    }, 
+    {
+          'No': 1,
+        'name': 'Носовой отсек',
+        'desc': 'торпедный, жилой, отсек-убежище.',
+       'param': '',
+       'truim': tanks['different1'],
+       'state': 'отсек в порядке'
+    }, 
+    {
+        'No': 2,
+        'name': '',
+        'desc': '',
+       'param': '',
+       'truim': tanks['fuel_tank1'],
+       'state': 'отсек в порядке'
+    }, 
+    {
+        'No': 3,
+        'name': 'Центральный пост',
+        'desc': 'отсек-убежище',
+       'param': '',
+       'truim': '',
+       'state': 'отсек в порядке'
+    }, 
+    {
+        'No': 4,
+        'name': '',
+        'desc': '',
+       'param': '',
+       'truim': tanks['fuel_tank2'],
+       'state': 'отсек в порядке'
+    }, 
+    {
+        'No': 5,
+        'name': '',
+        'desc': '',
+       'param': '',
+       'truim': '',
+       'state': 'отсек в порядке'
+    }, 
+    {
+        'No': 6,
+        'name': '',
+        'desc': '',
+       'param': '',
+       'truim': '',
+       'state': 'отсек в порядке'
+    }, 
+    {
+        'No': 7,
+        'name': 'Кормовой отсек',
+        'desc': 'Торпедный, жилой, отсек-убежище',
+       'param': '',
+       'truim': tanks['different2'],
+       'state': 'отсек в порядке'
+    }, 
+]
+
+
+########################################################
+# ПЛ со всем содержимым
+
+       
+hull = {
+        'light': {tanks['mainballast']},
+       'strong': { compartments}}
 
