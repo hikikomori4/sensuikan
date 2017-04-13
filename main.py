@@ -7,19 +7,15 @@
 
 # print(uboat.compartments)
 
-'''
-people = {'Alice': {'phone': '2341', 'addr': 'Foo drive 23' },
-          'Beth':  {'phone': '9102', 'addr': 'Bar street 42'}}
-name = 'Alice'          
-key = 'phone'
-if name in people: 
-  print("%s phone is %s" % (name, people[name][key]))
-'''
 
- 
+class Tanks(object):
+    def differential(self): 
+    pass
 
+different1 = differential(self)
+different2 = differential(self)
 
-
+# я не знаю, как мне это лучше применить в классах, чтобы код не потерял читаемость
 
 tanks = {
     'differential_1': 
@@ -100,7 +96,7 @@ compartments = [
     }, 
 ]
 
-print(
-comparements[0]['name']
-)
+print(compartments[0]['name'])
+
+
 
