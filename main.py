@@ -9,6 +9,7 @@ import shutil
 from resources import sea, uboat, locations
 
 
+
 def cls():
     try:
         os.system('clear')
