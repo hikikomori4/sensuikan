@@ -24,7 +24,7 @@ with open(filename, newline='') as f:
 
 
 # print(sea)
-# id, x, y, surface, bottom, status
+
 
 print(sea[0])
 print(sea[100])
