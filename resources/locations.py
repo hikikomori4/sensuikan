@@ -56,23 +56,23 @@ def reports():
      0 - Отмена.'''
         
     m_actions = {
-        'C1': rpt_C1,
-        'C2': rpt_C2,
-        'C3': rpt_C3,
-        'C4': rpt_C4,
-        'C5': rpt_C5,
-        'C6': rpt_C6,
-        'C7': rpt_C7,
+        'c1': rpt_C1,
+        'c2': rpt_C2,
+        'c3': rpt_C3,
+        'c4': rpt_C4,
+        'c5': rpt_C5,
+        'c6': rpt_C6,
+        'c7': rpt_C7,
         'с9': rpt_с9,
-        'C0': rpt_C0,
-        'R1': rpt_R1,
-        'R2': rpt_R2,
-        'R3': rpt_R3,
-        'R4': rpt_R4,
-        'R5': rpt_R5,
-        'R7': rpt_R7,
-        'R8': rpt_R8,
-        '00': rpt_0
+        'c0': rpt_C0,
+        'r1': rpt_R1,
+        'r2': rpt_R2,
+        'r3': rpt_R3,
+        'r4': rpt_R4,
+        'r5': rpt_R5,
+        'r7': rpt_R7,
+        'r8': rpt_R8,
+        '0': rpt_0
     }
     queryaction(m_actions, m_text)
     # почему зацикливается на рапорте, не возвращаясь в отсек откуда вызвали?
@@ -82,6 +82,7 @@ def reports():
      
 #C1 - Первый отсек-убежище,торпедный
 def rpt_C1():
+    print('...')
     pass
 
 #C2 - Второй отсек: аккумуляторный, каюта командира
