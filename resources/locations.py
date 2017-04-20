@@ -23,7 +23,7 @@ def dummy():
     print('Пусто пока...')
 
 def commands():
-    print('Пусто пока...')
+    print(__name__)
 
 
 def reports():
@@ -56,26 +56,97 @@ def reports():
      0 - Отмена.'''
         
     m_actions = {
-        'C1': dummy,
-        'C2': dummy,
-        'C3': dummy,
-        'C4': dummy,
-        'C5': dummy,
-        'C6': dummy,
-        'C7': dummy,
-        'с9': dummy,
-        'C0': dummy,
-        'R1': dummy,
-        'R2': dummy,
-        'R3': dummy,
-        'R4': dummy,
-        'R5': dummy,
-        'R7': dummy,
-        'R8': dummy,
-        '0': dummy
-        }
+        'C1': rpt_C1,
+        'C2': rpt_C2,
+        'C3': rpt_C3,
+        'C4': rpt_C4,
+        'C5': rpt_C5,
+        'C6': rpt_C6,
+        'C7': rpt_C7,
+        'с9': rpt_с9,
+        'C0': rpt_C0,
+        'R1': rpt_R1,
+        'R2': rpt_R2,
+        'R3': rpt_R3,
+        'R4': rpt_R4,
+        'R5': rpt_R5,
+        'R7': rpt_R7,
+        'R8': rpt_R8,
+        '00': rpt_0
+    }
     queryaction(m_actions, m_text)
     # почему зацикливается на рапорте, не возвращаясь в отсек откуда вызвали?
+     
+      
+      
+     
+#C1 - Первый отсек-убежище,торпедный
+def rpt_C1():
+    pass
+
+#C2 - Второй отсек: аккумуляторный, каюта командира
+def rpt_C2():
+    pass
+
+#C3 - Третий отсек-убежище: центральный пост
+def rpt_C3():
+    pass
+
+#C4 - Четвёртый отсек: аккумуляторный
+def rpt_C4():
+    pass
+
+#C5 - Пятый отсек: дизельный
+def rpt_C5():
+    pass
+
+#C6 - Шестой отсек: электромоторный
+def rpt_C6():
+    pass
+
+#C7 - Седьмой отсек-убежище: торпедный
+def rpt_C7():
+    pass
+
+#с9 - Ходовой мостик
+def rpt_с9():
+    pass
+
+#C0 - Боевая рубка
+def rpt_C0(): 
+    pass 
+
+#R1 - балластным и топливным цистернам
+def rpt_R1():
+    pass
+
+#R2 - баллонам воздуха высокого давления
+def rpt_R2():
+    pass
+
+#R3 - дизелям
+def rpt_R3():
+    pass
+
+#R4 - электромоторам
+def rpt_R4():
+    pass
+
+#R5 - аккумуляторным батареям
+def rpt_R5():
+    pass
+
+#R7 - палубному орудию и снарядам
+def rpt_R7():
+    pass
+
+#R8 - торпедным аппаратам и торпедам
+def rpt_R8():
+    pass
+    
+# Отмена рапорта
+def rpt_0():
+    pass
     
     
 def look():
