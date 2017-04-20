@@ -7,18 +7,21 @@ if __name__ == '__main__':
     exit(1)
 
 
-global uboatname
 
 
 uboatname = 'Тип "С" Средняя'
 uboatseries = 'IX-бис'
 
+c_coord = [250,50,0]
+c_differ = 0
+c_kren = 0
 
 ########################################################
 
 canon = {}
-
+canon_ammo ={}
 torpedos = {}
+torpedos_loaded = {}
 
 ########################################################
 
@@ -41,8 +44,13 @@ elmotor = {
 
 ########################################################
 
-battery1 = [5 for i in range(62)]
-battery2 = [5 for i in range(62)]
+battery_cell_v = 2.1
+battery_cell_h = 3000
+
+
+battery1 = [battery_cell_v for i in range(62)]
+battery2 = [battery_cell_v for i in range(62)]
+
 
 
 
@@ -98,18 +106,48 @@ tanks = {
     'fuel_tank1': 
         {
           'name': 'Топливная цистерна 1',
-          'Capacity': {'curr': 0, 'max': 1000},
+          'Capacity': {'curr': 900, 'max': 1000},
           'state': 'цистерна в порядке' 
         },
     'fuel_tank2': 
         {
           'name': 'Топливная цистерна 2',
-          'Capacity': {'curr': 0, 'max': 1000},
+          'Capacity': {'curr': 900, 'max': 1000},
           'state': 'цистерна в порядке' 
         }
     }
 
+########################################################
+#
+# Баллоны запаса ВВД
+#
+########################################################
+'''
+Вызов извне:
+print(uboat.baloon_vvd[1].capacity, uboat.baloon_vvd[1].taken, uboat.baloon_vvd[1].condition)
+print('\n',uboat.baloon_vvd,'\n')
+'''
 
+class Baloon:
+    """Конструктор баллонов воздуха высокого давления """
+
+    def __init__(self, capacity, taken, condition ):
+        self.capacity = capacity
+        self.taken = taken
+        self.condition = condition
+
+    def __repr__(self):
+        return '{} {} {}\n' \
+        .format(self.capacity, self.taken, self.condition)
+
+# Создание всех баллонов ВВД генератором в списке, методом класса.
+
+BALOON_VVD_OK = 0
+BALOON_VVD_BROKE = 1
+
+baloon_vvd = [
+    Baloon(300, 300, BALOON_VVD_OK) for i in range(14)
+    ]
 
 
 ########################################################
@@ -130,13 +168,13 @@ cpt_cabin =  {
        'state': 'В порядке'
     }, 
 
+
+
 ########################################################
 # Пример вызова извне:
 # print(uboat.compartments[2]['desc'])
 # print(uboat.compartments[2]['truim']['name'])
-    
-
-
+ 
 compartments = [
     {
           'no': None,
@@ -152,7 +190,7 @@ compartments = [
         'name': 'в носовом отсеке',
         'desc': 'Первый отсек-убежище: торпедный, жилое помещение для рядового состава.',
        'param': '',
-   'lighthull': (tanks['torpedorshaped1'], tanks['different1']),
+   'lighthull': (tanks['torpedorshaped1'], tanks['different1'],baloon_vvd[0],baloon_vvd[1]),
        'truim': '',
        'state': 'отсек в порядке'
     }, 
@@ -163,7 +201,7 @@ compartments = [
                 'аккумуляторных батарей, каюта командира, жилые помещения ' +
                 'офицерского состава.',
        'param': '',
-   'lighthull': tanks['fuel_tank1'],
+   'lighthull': (tanks['fuel_tank1'],baloon_vvd[2], baloon_vvd[3]),
        'truim': (battery1),
        'state': 'отсек в порядке'
     }, 
@@ -173,7 +211,7 @@ compartments = [
         'desc': 'Третий отсек-убежище: центральный пост (ЦП), над отсеком ' +
                 'расположена боевая рубка и ограждение выдвижных устройств.',
        'param': '',
-   'lighthull': '',
+   'lighthull': (baloon_vvd[4], baloon_vvd[5]),
        'truim': '',
        'state': 'отсек в порядке'
     }, 
@@ -183,7 +221,7 @@ compartments = [
         'desc': 'Четвёртый отсек: аккумуляторный, 62 элемента кормовой ' +
                 'группы аккумуляторных батарей, жилые помещения старшин.',
        'param': '',
-   'lighthull': tanks['fuel_tank2'],
+   'lighthull': (tanks['fuel_tank2'], baloon_vvd[6], baloon_vvd[7]),
        'truim': (battery2),
        'state': 'отсек в порядке'
     }, 
@@ -192,7 +230,7 @@ compartments = [
         'name': 'в дизельном отсеке',
         'desc': 'Пятый отсек: дизельный.',
        'param': '',
-   'lighthull': '',
+   'lighthull': (baloon_vvd[8], baloon_vvd[9]),
        'truim': diesel,
        'state': 'отсек в порядке'
     }, 
@@ -201,7 +239,7 @@ compartments = [
         'name': 'в электромоторном отсеке',
         'desc': 'Шестой отсек: электромоторный.',
        'param': '',
-   'lighthull': '',
+   'lighthull': (baloon_vvd[10],baloon_vvd[11]),
        'truim': elmotor,
        'state': 'отсек в порядке'
     }, 
@@ -210,7 +248,7 @@ compartments = [
         'name': 'в кормовом отсеке',
         'desc': 'Седьмой отсек-убежище: торпедный, жилое помещение для рядового личного состава.',
        'param': '',
-   'lighthull': (tanks['torpedorshaped2'], tanks['different2']),
+   'lighthull': (tanks['torpedorshaped2'], tanks['different2'],baloon_vvd[12],baloon_vvd[13]),
        'truim': '',
        'state': 'отсек в порядке'
     }, 

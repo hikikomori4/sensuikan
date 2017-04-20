@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 # coding: utf-8
 
-# May the Force be with you
+# Author: https://github.com/hikikomori4/sensuikan
+# May the Force be with you!
+# PyCharm must Die! 
+# Использую быструю и легковесную среду разработки:
+# http://geany.org/
 
 import os
 import sys
