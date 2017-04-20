@@ -8,6 +8,14 @@ if __name__ == '__main__':
 
 
 
+import os
+def cls():
+    try:
+        os.system('clear')
+    except:
+        os.system('cls')
+
+
 c_inv  = '\x1b\x5b\x37\x6d'
 c_bld = '\x1b\x5b\x31\x6d'
 c_drk = '\x1b\x5b\x32\x6d'
@@ -119,7 +127,17 @@ def rpt_C0():
 
 #R1 - балластным и топливным цистернам
 def rpt_R1():
-    pass
+    cls()
+    print('Рапорт по балластным и топливным цистернам:\n\n')
+    for ii in ('different1', 'different2', 'equalizing', 'quickdive', 'mainballast', 'torpedorshaped1', 'torpedorshaped2', 'fuel_tank1', 'fuel_tank2'):
+        print(uboat.tanks[ii]['name'] + '. Состояние: ' + uboat.tanks[ii]['state'] + c_drk + \
+        '\nобъём: ' + str(uboat.tanks[ii]['Capacity']['max']) + \
+        ', принято забортной воды: ' + str(uboat.tanks[ii]['Capacity']['curr']) + ' тонн.\n' + c_nrm) 
+         
+        
+    
+
+        
 
 #R2 - баллонам воздуха высокого давления
 def rpt_R2():

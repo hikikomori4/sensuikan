@@ -31,7 +31,7 @@ def print_c(line):
 
 def game_begin():
     cls()
-    print_c('Начало')
+    print_c('\nНачало\n')
     locations.loc_bridge()
 
 def game_back():
