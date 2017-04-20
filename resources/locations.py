@@ -15,20 +15,17 @@ c_und = '\x1b\x5b\x34\x6d'
 c_nrm = '\x1b\x5b\x30\x6d'
 
 
-##########################################################
-
-
-def dummy():
-    pass
-
-
+#####################
+#  Игровые локации  #
+#####################
 
 def commands():
     print('\nпока не реализовано...\n')
     
 def look():
-    globals()
-    print('\n'+curr_desc2+'\n')   # нужно сюда....
+    globals() # Получение глобальных переменных
+    print('\n'+curr_desc2+'\n')   
+    print(uboatname)
     
 
 
@@ -36,7 +33,7 @@ def printloc(curr_loc, curr_desc):
     print(
     '\n       '+c_drk+'* * *'+c_nrm+'\n\n' +
     'Вы находитесь ' + c_und + curr_loc + c_nrm + '.\n')
-    global curr_desc2
+    global curr_desc2  # объявление глобальной переменной 
     curr_desc2 = curr_desc
     
     

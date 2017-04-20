@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 # coding: utf-8
 
+
+
 # id, x, y, surface, bottom, status
 
 

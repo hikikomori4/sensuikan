@@ -7,6 +7,8 @@ if __name__ == '__main__':
     exit(1)
 
 
+global uboatname
+
 
 uboatname = 'Тип "С" Средняя'
 uboatseries = 'IX-бис'
