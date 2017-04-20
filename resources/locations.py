@@ -82,7 +82,7 @@ def reports():
         'r8': rpt_R8,
         '0': rpt_0
     }
-    queryaction(m_actions, m_text)
+    queryaction2(m_actions, m_text)
     # почему зацикливается на рапорте, не возвращаясь в отсек откуда вызвали?
      
       
@@ -127,8 +127,8 @@ def rpt_C0():
 
 #R1 - балластным и топливным цистернам
 def rpt_R1():
-    cls()
-    print('Рапорт по балластным и топливным цистернам:\n\n')
+    
+    print('Рапорт по балластным и топливным цистернам:\n')
     for ii in ('different1', 'different2', 'equalizing', 'quickdive', 'mainballast', 'torpedorshaped1', 'torpedorshaped2', 'fuel_tank1', 'fuel_tank2'):
         print(uboat.tanks[ii]['name'] + '. Состояние: ' + uboat.tanks[ii]['state'] + c_drk + \
         '\nобъём: ' + str(uboat.tanks[ii]['Capacity']['max']) + \
@@ -141,7 +141,13 @@ def rpt_R1():
 
 #R2 - баллонам воздуха высокого давления
 def rpt_R2():
-    pass
+    print('Рапорт по баллонам воздуха высокого давления:\n')
+    for ii in range(14):
+        if uboat.baloon_vvd[ii].condition == 0:
+            b_cond = 'исправен'
+        print('Объём баллона ' + str(ii) + ': ' + str(uboat.baloon_vvd[ii].capacity) + ', запас воздуха: ' + \
+        str(uboat.baloon_vvd[ii].taken) + ', состояние: ' + b_cond)
+    print()
 
 #R3 - дизелям
 def rpt_R3():
@@ -185,23 +191,43 @@ def printloc(curr_loc, curr_desc):
     
     
 
-def queryaction(m_actions, m_text):
+def queryaction(m_actions, m_text, m_locat):
     while True:
+        
+        printloc(m_locat[0], m_locat[1])
+        
         print(m_text, end='')
         cmd = input(' ')
         menuact = m_actions.get(cmd)
-
+    
         if menuact:
             menuact()
+            
         else:
             print('\nНеизвестная команда.\n')
+            queryaction(m_actions, m_text, m_locat)
+
+
+def queryaction2(m_actions, m_text):
+
+    print(m_text, end='')
+    cmd = input(' ')
+    menuact = m_actions.get(cmd)
+
+    if menuact:
+        menuact()
+        
+    else:
+        print('\nНеизвестная команда.\n')
+
+
 
 #########################################################
 
 
 
 def loc_bridge():
-    printloc(uboat.bridge[0]['name'], uboat.bridge[0]['desc'])
+    m_locat = (uboat.bridge[0]['name'], uboat.bridge[0]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Спуститься в рубку, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
         '1': loc_0,
@@ -209,11 +235,11 @@ def loc_bridge():
         'r': reports,
         'l': look
         }
-    queryaction(m_actions, m_text)
+    queryaction(m_actions, m_text, m_locat)
 
 def loc_0():
 
-    printloc(uboat.compartments[0]['name'], uboat.compartments[0]['desc'])
+    m_locat = (uboat.compartments[0]['name'], uboat.compartments[0]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Спуститься в 3й отсек, '+c_inv+'2'+c_nrm+'-Подняться на мостик, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
         '1': loc_3,
@@ -222,11 +248,11 @@ def loc_0():
         'r': reports,
         'l': look
         }
-    queryaction(m_actions, m_text)
+    queryaction(m_actions, m_text, m_locat)
     
 def loc_1():
 
-    printloc(uboat.compartments[1]['name'], uboat.compartments[1]['desc'])
+    m_locat = (uboat.compartments[1]['name'], uboat.compartments[1]['desc'])
     m_text = c_inv+'2'+c_nrm+'-Перейти во 2й отсек, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
         '2': loc_2,
@@ -234,11 +260,11 @@ def loc_1():
         'r': reports,
         'l': look
         }
-    queryaction(m_actions, m_text)
+    queryaction(m_actions, m_text, m_locat)
 
 def loc_2():
 
-    printloc(uboat.compartments[2]['name'], uboat.compartments[2]['desc'])
+    m_locat = (uboat.compartments[2]['name'], uboat.compartments[2]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти в 1й отсек, '+c_inv+'2'+c_nrm+'-Перейти в 3й отсек, '+c_inv+'C'+c_nrm+'-В каюту командира, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
         '1': loc_1,
@@ -248,11 +274,11 @@ def loc_2():
         'r': reports,
         'l': look
         }
-    queryaction(m_actions, m_text)
+    queryaction(m_actions, m_text, m_locat)
 
 def loc_2c():
 
-    printloc(uboat.cpt_cabin[0]['name'], uboat.cpt_cabin[0]['desc'])
+    m_locat = (uboat.cpt_cabin[0]['name'], uboat.cpt_cabin[0]['desc'])
     m_text = c_inv+'2'+c_nrm+'-Выйти из каюты, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
         '2': loc_2,
@@ -260,11 +286,11 @@ def loc_2c():
         'r': reports,
         'l': look
         }
-    queryaction(m_actions, m_text)
+    queryaction(m_actions, m_text, m_locat)
 
 def loc_3():
 
-    printloc(uboat.compartments[3]['name'], uboat.compartments[3]['desc'])
+    m_locat = (uboat.compartments[3]['name'], uboat.compartments[3]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти во 2й отсек, '+c_inv+'2'+c_nrm+'-Перейти в 4й отсек, '+c_inv+'3'+c_nrm+'-Подняться в боевую рубку, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
         '1': loc_2,
@@ -274,11 +300,11 @@ def loc_3():
         'r': reports,
         'l': look
         }
-    queryaction(m_actions, m_text)
+    queryaction(m_actions, m_text, m_locat)
 
 def loc_4():
 
-    printloc(uboat.compartments[4]['name'], uboat.compartments[4]['desc'])
+    m_locat = (uboat.compartments[4]['name'], uboat.compartments[4]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти в 3й отсек, '+c_inv+'2'+c_nrm+'-Перейти в 5й отсек, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
         '1': loc_3,
@@ -287,11 +313,11 @@ def loc_4():
         'r': reports,
         'l': look
         }
-    queryaction(m_actions, m_text)
+    queryaction(m_actions, m_text, m_locat)
 
 def loc_5():
 
-    printloc(uboat.compartments[5]['name'], uboat.compartments[5]['desc'])
+    m_locat = (uboat.compartments[5]['name'], uboat.compartments[5]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти в 4й отсек, '+c_inv+'2'+c_nrm+'-Перейти в 6й отсек, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
         '1': loc_4,
@@ -300,11 +326,11 @@ def loc_5():
         'r': reports,
         'l': look
         }
-    queryaction(m_actions, m_text)
+    queryaction(m_actions, m_text, m_locat)
 
 def loc_6():
 
-    printloc(uboat.compartments[6]['name'], uboat.compartments[6]['desc'])
+    m_locat = (uboat.compartments[6]['name'], uboat.compartments[6]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти в 5й отсек, '+c_inv+'2'+c_nrm+'-Перейти в 7й отсек, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
         '1': loc_5,
@@ -313,11 +339,11 @@ def loc_6():
         'r': reports,
         'l': look
         }
-    queryaction(m_actions, m_text)
+    queryaction(m_actions, m_text, m_locat)
 
 def loc_7():
 
-    printloc(uboat.compartments[7]['name'], uboat.compartments[7]['desc'])
+    m_locat = (uboat.compartments[7]['name'], uboat.compartments[7]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти в 6й отсек, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
         '1': loc_6,
@@ -325,5 +351,5 @@ def loc_7():
         'r': reports,
         'l': look
         }
-    queryaction(m_actions, m_text)
+    queryaction(m_actions, m_text, m_locat)
 
