@@ -31,108 +31,340 @@ def dummy():
     print('Пусто пока...')
 
 def commands():
-    print(__name__)
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n')
+
+    m_text ='''КОМАНДЫ:
+    
+        Перекладка положения рулей:
+    1 - вертикального руля
+    2 - носовых рулей глубины
+    3 - кормовых рулей глубины
+    
+        Старт и останов двигателей:
+    4 - Дизельных (только на поверхности или под РДП)
+    5 - Электрических
+    
+        Продувка и приём забортной воды:
+    a - Носовая дифферентная цистерна.
+    b - Кормовая дифферентная цистерна.
+    c - Уравнительная цистерна.
+    d - Цистерна быстрого погружения.
+    e - Цистерна главного балласта (ЦГБ)
+    
+    0 - Отмена
+
+    '''
+
+
+
+
+    m_actions = {
+         '1': cmd_1,
+         '2': cmd_2,
+         '3': cmd_3,
+         '4': cmd_4,
+         '5': cmd_5,
+         'a': cmd_a,
+         'b': cmd_b,
+         'c': cmd_c,
+         'd': cmd_d,
+         'e': cmd_e,
+         '0': cmd_0
+    }
+    queryaction2(m_actions, m_text)
+
+
+def cmd_1(): 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n')  
+    print('Текущее положение вертикального курсового руля: ' + str(uboat.v_rule))
+    print('''
+    Выберите значения: 0 - прямой руль, 
+    положительное число - руль вправо на n град.
+    отрицательное число - руль влево на n град.
+    ''')
+    nn = input('Введите новое значение (Enter - отмена): ')
+    if not nn:
+        nn = uboat.v_rule
+    else:
+        uboat.v_rule = int(nn)
+        print('Задано новое значение: ' + str(uboat.v_rule))
+     
+def cmd_2(): 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n')  
+    print('Текущее положение носовых рулей глубины: ' + str(uboat.h_rule1))
+    print('''
+    Выберите значения: 0 - прямой руль, 
+    положительное число - руль на всплытие на n град.
+    отрицательное число - руль на погружение на n град.
+    ''')
+    nn = input('Введите новое значение (Enter - отмена): ')
+    if not nn:
+        nn = uboat.h_rule1
+    else:
+        uboat.h_rule1 = int(nn)
+        print('Задано новое значение: ' + str(uboat.h_rule1))
+    
+         
+def cmd_3(): 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n')  
+    print('Текущее положение кормовых рулей глубины: ' + str(uboat.h_rule2))
+    print('''
+    Выберите значения: 0 - прямой руль, 
+    положительное число - руль на всплытие на n град.
+    отрицательное число - руль на погружение на n град.
+    ''')
+    nn = input('Введите новое значение (Enter - отмена): ')
+    if not nn:
+        nn = uboat.h_rule2
+    else:
+        uboat.h_rule2 = int(nn)
+        print('Задано новое значение: ' + str(uboat.h_rule2))
+    
+         
+def cmd_4(): 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n') 
+    print('ДИЗЕЛЯ:\n')
+    print('Текущее состояние двигателей: ' + str(uboat.engines['diesel1']['rpm']))
+        
+    if uboat.c_coord[2] < 0:
+        print('Глубина ' + str(uboat.c_coord[2]) +' метров! Под водой запуск дизелей возможен только на перископной глубине под РДП.')
+    else:
+        print('''
+    Выберите значения: 0 - СТОП машина, 
+    положительное число - движение вперёд на оборотах от 100 до 7500.
+    отрицательное число - аналогичное движение назад.
+    ''')
+        nn = input('Введите новое значение (Enter - отмена): ')
+        if not nn:
+            nn = uboat.engines['diesel1']['rpm']
+        elif (int(nn) > -7501 and int(nn) < -99) or (int(nn) > 99 and int(nn) < 7501) or int(nn) == 0:
+            uboat.engines['diesel1']['rpm'] = int(nn)
+            print('Задано новое значение: ' + str(uboat.engines['diesel1']['rpm']))
+            uboat.engines['diesel2']['rpm'] = uboat.engines['diesel1']['rpm']
+        else:
+            print(c_und +'Ошибка. Значение должно быть в диапазоне 100-7500 оборотов!' + c_nrm)
+        
+           
+def cmd_5(): 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n') 
+    print('ЭЛЕКТРОДВИГАТЕЛИ:\n')
+    print('Текущее состояние двигателей: ' + str(uboat.engines['electro1']['rpm']))
+    print('''    
+    Выберите значения: 0 - СТОП машина, 
+    положительное число - движение вперёд на оборотах от 100 до 3500.
+    отрицательное число - аналогичное движение назад.
+    ''')
+    nn = input('Введите новое значение (Enter - отмена): ')
+    if not nn:
+        nn = uboat.engines['electro1']['rpm']
+    elif (int(nn) > -3501 and int(nn) < -99) or (int(nn) > 99 and int(nn) < 3501) or int(nn) == 0:
+        uboat.engines['electro1']['rpm'] = int(nn)
+        print('Задано новое значение: ' + str(uboat.engines['electro1']['rpm']))
+        uboat.engines['electro2']['rpm'] = uboat.engines['electro1']['rpm']
+    else:
+        print(c_und +'Ошибка. Значение должно быть в диапазоне 100-3500 оборотов!' + c_nrm)
+        
+
+    
+        
+           
+def cmd_a(): 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n') 
+    print(uboat.tanks['different1']['name'] + '\n')
+    uboat.tanks['different1']['Capacity']['curr'] = 1000 # tmp  
+    if uboat.tanks['different1']['Capacity']['curr'] == 0:
+        print('Цистерна пуста.')
+    else:
+        print('В цистерну принято '+ str(uboat.tanks['different1']['Capacity']['curr']) +' тонн забортной воды из ' + str(uboat.tanks['different1']['Capacity']['max']) + ' возможных.')
+    
+    print('''
+    Введите положительное значение для приёма забортной воды 
+    в тоннах, либо отрицательное для продувки цистерны воздухом 
+    ВД объёмом необходимым для указанного тоннажа воды.
+    ''')
+    
+    nn = input('Введите значение (Enter - отмена): ')
+
+    if int(nn) < 0 and int(nn) > uboat.tanks['different1']['Capacity']['max'] - (uboat.tanks['different1']['Capacity']['max']*2+1):
+        # Выше проверка, что введено отрицательное число от -1 до -ёмкость цистерны+1
+        # И если так, то продувка ВВД:
+        
+        print(uboat.tanks['different1']['name'] + ' продута ВВД.\n'+ 
+        'Вытеснено ' + str(nn) + ' тонн воды, затрачено' +  ' воздуха из баллонов ВВД')
+        
+        
+        print(uboat.vvd_all)
+        
+        uboat.Baloon.vvd_out(nn)
+        
+        print(uboat.vvd_all)
+        
+        
+        
+        
+        #for i in range(14):
+            #vvdall += uboat.baloon_vvd[i].taken
+            
+        
+        
+        
+    else:
+        print('условие не выполнилось!') # значение не из указанного минусового периода.
+    
+
+
+    #def vvd(out):
+        #for i in range(14):
+            #if uboat.baloon_vvd[i].taken > 0:
+                #uboat.baloon_vvd[i].taken = uboat.baloon_vvd[i].taken -
+        #print(vvdall)
+
+
+
+   
+
+
+
+'''
+< uboat.tanks['different1']['Capacity']['max']
+    if not nn:
+        pass
+    elif int(nn) > 0:
+        uboat.tanks['different1']['Capacity']['curr'] += int(nn)
+    elif int(nn) < 0:
+        nn2 = int(nn) if int(nn) > 0 else -int(nn)
+        uboat.tanks['different1']['Capacity']['curr'] = loaded - nn2
+        print('Теперь в цистерне ' + int(uboat.tanks['different1']['Capacity']['curr']) + 'тонн.')
+'''
+          
+def cmd_b(): 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n') 
+    
+          
+def cmd_c(): 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n')  
+    
+         
+def cmd_d(): 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n') 
+    
+          
+def cmd_e(): 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n')
+    
+          
+def cmd_0(): 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n')  
+         
 
 
 def reports():
-     
-    m_text ='''
-         Запросить рапорт по отсекам:
-         
-    C1 - Первый отсек-убежище,торпедный
-    C2 - Второй отсек: аккумуляторный, каюта командира
-    C3 - Третий отсек-убежище: центральный пост
-    C4 - Четвёртый отсек: аккумуляторный
-    C5 - Пятый отсек: дизельный
-    C6 - Шестой отсек: электромоторный
-    C7 - Седьмой отсек-убежище: торпедный
-    с9 - Ходовой мостик
-    C0 - Боевая рубка
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n')
+    m_text ='''РАПОРТЫ:
+    
+     1 - Снять показания с приборов навигации
+         и положения ДПЛ в пространстве
+        
+     2 - Запросить рапорт по всем отсекам.
     
          Запросить рапорт по системам:
     
-    R1 - балластным и топливным цистернам
-    R2 - баллонам воздуха высокого давления
-    R3 - дизелям
-    R4 - электромоторам
-    R5 - аккумуляторным батареям
+     3 - балластным и топливным цистернам
+     4 - баллонам воздуха высокого давления
+     5 - электромоторам и дизелям
+     6 - аккумуляторным батареям
     
          Запросить рапорт по вооружению:
-    R7 - палубному орудию и снарядам
-    R8 - торпедным аппаратам и торпедам
+
+     7 - палубному орудию и снарядам
+     8 - торпедным аппаратам и торпедам
     
      0 - Отмена.'''
         
     m_actions = {
-        'c1': rpt_C1,
-        'c2': rpt_C2,
-        'c3': rpt_C3,
-        'c4': rpt_C4,
-        'c5': rpt_C5,
-        'c6': rpt_C6,
-        'c7': rpt_C7,
-        'с9': rpt_с9,
-        'c0': rpt_C0,
-        'r1': rpt_R1,
-        'r2': rpt_R2,
-        'r3': rpt_R3,
-        'r4': rpt_R4,
-        'r5': rpt_R5,
-        'r7': rpt_R7,
-        'r8': rpt_R8,
-        '0': rpt_0
+         '1': rpt_r,
+         '2': rpt_c,
+         '3': rpt_R1,
+         '4': rpt_R2,
+         '5': rpt_rd,
+         '6': rpt_ra,
+         '7': rpt_R7,
+         '8': rpt_R8,
+         '0': rpt_0
     }
     queryaction2(m_actions, m_text)
-    # почему зацикливается на рапорте, не возвращаясь в отсек откуда вызвали?
+    
+     
      
       
+def rpt_r():
+    print('\n       '+c_drk+'* * *'+c_nrm+'\n\n' + \
+    '\nВаши текущие координаты на карте: x = {}, y = {}, глубина = {}.\nСкорость: {} узлов.' \
+    .format(uboat.c_coord[0], uboat.c_coord[1],uboat.c_coord[2], uboat.speed))
+    
+    if uboat.c_differ == 0:
+        c_differ = 'отсутствует'
+    elif uboat.c_differ > 0:
+        c_differ = 'на нос ' + str(uboat.c_differ) + ' градус(а)'
+    elif uboat.c_differ < 0:
+        c_differ = 'на корму ' + str(uboat.c_differ) + ' градус(а)'
+
+    if uboat.c_kren == 0:
+        c_kren = 'отсутствует'
+    elif uboat.c_kren > 0:
+        c_kren = 'на правый борт ' + str(uboat.c_kren) + ' градус(а)'
+    elif uboat.c_kren < 0:
+        c_kren = 'на левый борт ' + str(uboat.c_kren) + ' градус(а)'
+    
+    print('\nДифферент ' + c_differ + '. ' + 'Крен ' + c_kren + '.\n' )
+    
+    if uboat.v_rule == 0:
+        v_rule = 'прямо по курсу'
+    elif uboat.v_rule > 0:
+        v_rule = 'на правый борт ' + str(uboat.v_rule) + ' градус(а)'
+    elif uboat.v_rule < 0:
+        v_rule = 'на левый борт ' + str(uboat.v_rule) + ' градус(а)'
+
+    if uboat.h_rule1 == 0:
+        h_rule1 = 'горизонтальное'
+    elif uboat.h_rule1 > 0:
+        h_rule1 = 'на всплытие ' + str(uboat.h_rule1) + ' градус(а)'
+    elif uboat.h_rule1 < 0:
+        h_rule1 = 'на погружение ' + str(uboat.h_rule1) + ' градус(а)'
       
+    if uboat.h_rule2 == 0:
+        h_rule2 = 'горизонтальное'
+    elif uboat.h_rule2 > 0:
+        h_rule2 = 'на всплытие ' + str(uboat.h_rule2) + ' градус(а)'
+    elif uboat.h_rule2 < 0:
+        h_rule2 = 'на погружение ' + str(uboat.h_rule2) + ' градус(а)'
+
+    print('          | вертикального руля - ' + v_rule + '.')
+    print('Положение | носовых рулей глубины - ' + h_rule1 + \
+    '. \n          | кормовых рулей глубины - ' + h_rule2 + '.')
+
+    
      
 #C1 - Первый отсек-убежище,торпедный
-def rpt_C1():
-    print('...')
-    pass
+def rpt_c():
+     
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n\nДоклад о состоянии отсеков ДПЛ:\n\n' +
+    
+    'В ' + uboat.bridge[0]['name'] + ' ' + c_drk + uboat.bridge[0]['state'] + c_nrm + 
+    '\nВ ' + uboat.cpt_cabin[0]['name'] + ' ' + c_drk + uboat.cpt_cabin[0]['state'] + c_nrm )
+    
+    for ii in range(1,8):
+        print('В ' + uboat.compartments[ii]['name'] + ' ' + c_drk + uboat.compartments[ii]['state'] + c_nrm)
 
-#C2 - Второй отсек: аккумуляторный, каюта командира
-def rpt_C2():
-    pass
-
-#C3 - Третий отсек-убежище: центральный пост
-def rpt_C3():
-    pass
-
-#C4 - Четвёртый отсек: аккумуляторный
-def rpt_C4():
-    pass
-
-#C5 - Пятый отсек: дизельный
-def rpt_C5():
-    pass
-
-#C6 - Шестой отсек: электромоторный
-def rpt_C6():
-    pass
-
-#C7 - Седьмой отсек-убежище: торпедный
-def rpt_C7():
-    pass
-
-#с9 - Ходовой мостик
-def rpt_с9():
-    pass
-
-#C0 - Боевая рубка
-def rpt_C0(): 
-    pass 
 
 #R1 - балластным и топливным цистернам
 def rpt_R1():
-    
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n')
     print('Рапорт по балластным и топливным цистернам:\n')
     for ii in ('different1', 'different2', 'equalizing', 'quickdive', 'mainballast', 'torpedorshaped1', 'torpedorshaped2', 'fuel_tank1', 'fuel_tank2'):
         print(uboat.tanks[ii]['name'] + '. Состояние: ' + uboat.tanks[ii]['state'] + c_drk + \
         '\nобъём: ' + str(uboat.tanks[ii]['Capacity']['max']) + \
-        ', принято забортной воды: ' + str(uboat.tanks[ii]['Capacity']['curr']) + ' тонн.\n' + c_nrm) 
+        ', принято: ' + str(uboat.tanks[ii]['Capacity']['curr']) + ' тонн.\n' + c_nrm) 
          
         
     
@@ -149,25 +381,34 @@ def rpt_R2():
         str(uboat.baloon_vvd[ii].taken) + ', состояние: ' + b_cond)
     print()
 
-#R3 - дизелям
-def rpt_R3():
-    pass
+ 
+def rpt_rd():
+ 
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n\nДоклад по двигателям:\n')
 
-#R4 - электромоторам
-def rpt_R4():
-    pass
+    print('Дизель 1 ' + uboat.engines['diesel1']['state'] + ', обороты - ' + str(uboat.engines['diesel1']['rpm'])+ ".") 
+    print('Дизель 2 ' + uboat.engines['diesel2']['state'] + ', обороты - ' + str(uboat.engines['diesel2']['rpm'])+ ".")
+    print('Электродвигатель 1 ' + uboat.engines['electro1']['state'] + ', обороты - ' + str(uboat.engines['electro1']['rpm'])+ ".")
+    print('Электродвигатель 2 ' + uboat.engines['electro2']['state'] + ', обороты - ' + str(uboat.engines['electro2']['rpm'])+ ".")
+
 
 #R5 - аккумуляторным батареям
-def rpt_R5():
-    pass
+def rpt_ra():
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n\nДоклад по АКБ:\n')
+    print('\nПриблизительный запас хода: ' + str(uboat.battery_cell_h) +'\n')
+    print('Напряжения на 62-х элементах 1й группы АКБ:', uboat.battery1)
+    print()
+    print('Напряжения на 62-х элементах 2й группы АКБ:', uboat.battery1)
+    
+    
 
 #R7 - палубному орудию и снарядам
 def rpt_R7():
-    pass
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n\nЭто учебное судно, вооружение демонтировано до окончания ходовых испытаний.\n')
 
 #R8 - торпедным аппаратам и торпедам
 def rpt_R8():
-    pass
+    print('\n            ' + c_drk + '* * *' + c_nrm + '\n\nЭто учебное судно, вооружение демонтировано до окончания ходовых испытаний.\n')
     
 # Отмена рапорта
 def rpt_0():
@@ -177,15 +418,17 @@ def rpt_0():
 def look():
     globals() # Получение глобальных переменных 
     print('\n'+curr_desc2+'\n') 
-    print('\nВаши текущие координаты: x = {}, y = {}, глубина = {}. \n' \
-    .format(uboat.c_coord[0], uboat.c_coord[1],uboat.c_coord[2]))
-      
-
-
+ 
 def printloc(curr_loc, curr_desc):
+    
+    if curr_loc == uboat.bridge[0]['name']:
+        vna = 'на '
+    else:
+        vna = 'в '
+        
     print(
     '\n       '+c_drk+'* * *'+c_nrm+'\n\n' +
-    'Вы находитесь ' + c_und + curr_loc + c_nrm + '.\n')
+    'Вы находитесь ' + vna + c_und + curr_loc + c_nrm + '.\n')
     global curr_desc2  # объявление глобальной переменной 
     curr_desc2 = curr_desc
     
@@ -204,7 +447,7 @@ def queryaction(m_actions, m_text, m_locat):
             menuact()
             
         else:
-            print('\nНеизвестная команда.\n')
+            print('\nНеизвестная команда.')
             queryaction(m_actions, m_text, m_locat)
 
 
@@ -216,7 +459,7 @@ def queryaction2(m_actions, m_text):
 
     if menuact:
         menuact()
-        
+    
     else:
         print('\nНеизвестная команда.\n')
 
