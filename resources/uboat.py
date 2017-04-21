@@ -166,9 +166,9 @@ class Baloon:
             if baloon_vvd[i].taken > wtr_out:   
                 baloon_vvd[i].taken -= wtr_out  # то из этого баллона вычитается требуемое
                 ctank -= n                      # объём воды в цистерне уменьшается
+                baloon_vvd[i].taken -= (n)    # объём запасов ВВД уменьшается
                 tanks['different1']['Capacity']['curr'] = str(ctank)
                 return tanks['different1']['Capacity']['curr']
-                print('tra-ta-ta! ',tanks['different1']['Capacity']['curr'])
                 break
             else:
                 print('wtr_out = ', wtr_out)

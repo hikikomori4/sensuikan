@@ -182,12 +182,15 @@ def cmd_a():
     else:
         print('В цистерну принято '+ str(uboat.tanks['different1']['Capacity']['curr']) +' тонн забортной воды из ' + str(uboat.tanks['different1']['Capacity']['max']) + ' возможных.')
     print('Всего запасов ВВД: ' + str(uboat.vvd_all))
+    
     i = int(input('\n' +
     ' 1 - Принять воду в цистерну\n' +
     ' 2 - Откачать воду воздухом высокого давления\n' + 
-    ' 0 - Отмена\n\n '))
+    ' 3 - Запросить рапорт по воздуху высокого давления\n' + 
     
-     
+    
+    ' 0 - Отмена\n\n '))
+         
     if i == 1:
         n = int(input('Сколько тонн воды принять? '))
         if n < (uboat.tanks['different1']['Capacity']['max'] - uboat.tanks['different1']['Capacity']['curr'] + 1):
@@ -201,19 +204,18 @@ def cmd_a():
         n = int(input('Сколько тонн воды откачать? '))
         if n < int(uboat.tanks['different1']['Capacity']['curr'] + 1):
             #uboat.tanks['different1']['Capacity']['curr'] -= n
-            # трата воздуха на продувку в рассчёте 1 мера ВВД на 3 меры воды.
-            wtr_out = (int(n)/3)
+            # трата воздуха на продувку 
+            wtr_out = n/3
             uboat.Baloon.vvd_wtr_out(wtr_out, n, uboat.tanks['different1']['Capacity']['curr'])
-            
-        
+         
         else:
             print('Нельзя откачать воды больше, чем есть в цистерне!')
         
+    elif i == 3:
+        rpt_R2()
         
-        
-        
-    else:
-        print('выбрано else', i)
+    elif i == 0:
+        print('Отмена действия.')
         
     
     
