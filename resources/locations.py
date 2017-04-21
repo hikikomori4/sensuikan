@@ -170,7 +170,7 @@ def cmd_5():
            
 def cmd_a():
     
-    uboat.tanks['different1']['Capacity']['curr'] = 900 # временно!!!
+    
     
     print('\n            ' + c_drk + '* * *' + c_nrm + '\n') 
     print(uboat.tanks['different1']['name'] + '\n')
@@ -203,8 +203,8 @@ def cmd_a():
             #uboat.tanks['different1']['Capacity']['curr'] -= n
             # трата воздуха на продувку в рассчёте 1 мера ВВД на 3 меры воды.
             wtr_out = (int(n)/3)
-            print('wtr_out = ', wtr_out) # tmp
             uboat.Baloon.vvd_wtr_out(wtr_out, n, uboat.tanks['different1']['Capacity']['curr'])
+            
         
         else:
             print('Нельзя откачать воды больше, чем есть в цистерне!')
