@@ -171,45 +171,88 @@ def cmd_5():
 def cmd_a(): 
     print('\n            ' + c_drk + '* * *' + c_nrm + '\n') 
     print(uboat.tanks['different1']['name'] + '\n')
-    uboat.tanks['different1']['Capacity']['curr'] = 1000 # tmp  
+    
     if uboat.tanks['different1']['Capacity']['curr'] == 0:
-        print('Цистерна пуста.')
+        print('Цистерна пуста. Можно принять до ' + str(uboat.tanks['different1']['Capacity']['max']) + ' тонн.')
+    elif uboat.tanks['different1']['Capacity']['curr'] == uboat.tanks['different1']['Capacity']['max']:
+        print('Цистерна полна! Можно откачать до ' + str(uboat.tanks['different1']['Capacity']['max']) + ' тонн.')
     else:
         print('В цистерну принято '+ str(uboat.tanks['different1']['Capacity']['curr']) +' тонн забортной воды из ' + str(uboat.tanks['different1']['Capacity']['max']) + ' возможных.')
+    print('Всего запасов ВВД: ' + str(uboat.vvd_all))
+    i = int(input('\n' +
+    ' 1 - Принять воду в цистерну\n' +
+    ' 2 - Откачать воду воздухом высокого давления\n' + 
+    ' 0 - Отмена\n\n '))
     
-    print('''
-    Введите положительное значение для приёма забортной воды 
-    в тоннах, либо отрицательное для продувки цистерны воздухом 
-    ВД объёмом необходимым для указанного тоннажа воды.
-    ''')
+     
+    if i == 1:
+        n = int(input('Сколько тонн воды принять? '))
+        if n < (uboat.tanks['different1']['Capacity']['max'] - uboat.tanks['different1']['Capacity']['curr'] + 1):
+            uboat.tanks['different1']['Capacity']['curr'] += n
+            print('В цистерну принято ' + str(n) + ' тонн.') 
+            
+        else:
+            print('Нельзя принять больше объёма цистерны!')
+            
+    elif i == 2:
+        n = int(input('Сколько тонн воды откачать? '))
+        if n < int(uboat.tanks['different1']['Capacity']['curr'] + 1):
+            #uboat.tanks['different1']['Capacity']['curr'] -= n
+            # трата воздуха на продувку в рассчёте 1 мера ВВД на 3 меры воды.
+            wtr_out = 111
+            print('wtr_out = ', wtr_out) # tmp
+            uboat.Baloon.wtr_out(wtr_out, n, tanks['different1']['Capacity']['curr'])
+        
+        else:
+            print('Нельзя откачать воды больше, чем есть в цистерне!')
+        
+        
+        
+        
+    else:
+        print('выбрано else', i)
+        
     
-    nn = input('Введите значение (Enter - отмена): ')
+    
+    #print('''
+    #Введите положительное значение для приёма забортной воды 
+    #в тоннах, либо отрицательное для продувки цистерны воздухом 
+    #ВД объёмом необходимым для указанного тоннажа воды.
+    #''')
+    
+    #nn = input('Введите значение (Enter - отмена): ')
 
-    if int(nn) < 0 and int(nn) > uboat.tanks['different1']['Capacity']['max'] - (uboat.tanks['different1']['Capacity']['max']*2+1):
-        # Выше проверка, что введено отрицательное число от -1 до -ёмкость цистерны+1
-        # И если так, то продувка ВВД:
+    #if int(nn) < 0 and int(nn) > uboat.tanks['different1']['Capacity']['max'] - (uboat.tanks['different1']['Capacity']['max']*2+1):
+        ## Выше проверка, что введено отрицательное число от -1 до -ёмкость цистерны+1
+        ## И если так, то продувка ВВД:
         
-        print(uboat.tanks['different1']['name'] + ' продута ВВД.\n'+ 
-        'Вытеснено ' + str(nn) + ' тонн воды, затрачено' +  ' воздуха из баллонов ВВД')
-        
-        
-        print(uboat.vvd_all)
-        
-        uboat.Baloon.vvd_out(nn)
-        
-        print(uboat.vvd_all)
+        #print(uboat.tanks['different1']['name'] + ' продута ВВД.\n'+ 
+        #'Вытеснено ' + str(nn) + ' тонн воды, затрачено' +  ' воздуха из баллонов ВВД')
         
         
+        #print(uboat.vvd_all)
         
-        
+        #print('Воздуха в каждом из баллонов:')
         #for i in range(14):
-            #vvdall += uboat.baloon_vvd[i].taken
+            #print(uboat.baloon_vvd[i].taken)
+        
+        
+        
+        #uboat.Baloon.vvd_out(int(nn), tanks['different1']['Capacity']['curr'])
+        
+        
+        
+        #print(uboat.vvd_all)
+        
+        #print('Воздуха в каждом из баллонов:')
+        #for i in range(14):
+            #print(uboat.baloon_vvd[i].taken)
             
         
         
         
-    else:
-        print('условие не выполнилось!') # значение не из указанного минусового периода.
+    #else:
+        #print('условие не выполнилось!') # значение не из указанного минусового периода.
     
 
 

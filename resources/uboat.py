@@ -160,15 +160,28 @@ class Baloon:
         return '{} {} {}\n' \
         .format(self.capacity, self.taken, self.condition)
         
-    def vvd_out(out):
+    def vvd_wtr_out(wtr_out, n, ctank):
         for i in range(14):
-            if baloon_vvd[i].taken > out:
-                baloon_vvd[i].taken -= out
+            # Если в баллоне больше, чем запрашиваемый объём
+            if baloon_vvd[i].taken > wtr_out:
+                baloon_vvd[i].taken -= wtr_out # то из этого баллона вычитается требуемое
+                ctank -= n                     # объём воды в цистерне уменьшается
+                return tanks['different1']['Capacity']['curr'] ==  str(ctank)
                 break
             else:
-                out -= baloon_vvd[i].taken
-                baloon_vvd[i].taken = 0
-            
+                print('wtr_out = ', wtr_out)
+
+
+
+
+
+                #wtr_out -= baloon_vvd[i].taken
+                #baloon_vvd[i].taken = 0
+                #print('wtr_out = ', wtr_out)
+        
+        #ctank -=()
+        #tanks['different1']['Capacity']['curr'] = ctank
+        #return baloon_vvd[i].taken
             
             
         
