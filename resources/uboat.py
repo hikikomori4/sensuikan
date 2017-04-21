@@ -160,38 +160,7 @@ class Baloon:
         return '{} {} {}\n' \
         .format(self.capacity, self.taken, self.condition)
         
-    def vvd_wtr_out(wtr_out, n, ctank):
-        for i in range(14):
-                                                # Если в баллоне больше, чем запрашиваемый объём
-            if baloon_vvd[i].taken > wtr_out:   
-                baloon_vvd[i].taken -= wtr_out  # то из этого баллона вычитается требуемое
-                ctank -= n                      # объём воды в цистерне уменьшается
-                if baloon_vvd[i].taken > n:
-                    baloon_vvd[i].taken -= (n)    # объём запасов ВВД уменьшается
-                else:
-                    break
-                tanks['different1']['Capacity']['curr'] = str(ctank)
-                return tanks['different1']['Capacity']['curr']
-                
-            else:
-                print('wtr_out = ', wtr_out)
 
-
-
-
-
-                #wtr_out -= baloon_vvd[i].taken
-                #baloon_vvd[i].taken = 0
-                #print('wtr_out = ', wtr_out)
-        
-        #ctank -=()
-        #tanks['different1']['Capacity']['curr'] = ctank
-        #return baloon_vvd[i].taken
-            
-            
-        
-       
-        
 
 # Создание всех баллонов ВВД генератором в списке, методом класса.
 
