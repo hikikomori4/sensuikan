@@ -162,11 +162,17 @@ class Baloon:
         
     def vvd_out(out):
         for i in range(14):
-            yield baloon_vvd[i].taken-out
+            if baloon_vvd[i].taken > out:
+                baloon_vvd[i].taken -= out
+                break
+            else:
+                out -= baloon_vvd[i].taken
+                baloon_vvd[i].taken = 0
+            
+            
             
         
-        
-#        baloon_vvd[i].taken
+       
         
 
 # Создание всех баллонов ВВД генератором в списке, методом класса.
