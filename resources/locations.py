@@ -170,8 +170,6 @@ def cmd_5():
            
 def cmd_a():
     
-    
-    
     print('\n            ' + c_drk + '* * *' + c_nrm + '\n') 
     print(uboat.tanks['different1']['name'] + '\n')
     
@@ -187,6 +185,10 @@ def cmd_a():
     ' 1 - Принять воду в цистерну\n' +
     ' 2 - Откачать воду воздухом высокого давления\n' + 
     ' 3 - Запросить рапорт по воздуху высокого давления\n' + 
+    ' 4 - В ВВД1-2воздуха: ' +  str(uboat.baloon_vvd[0].taken) +' \ ' + str(uboat.baloon_vvd[1].taken) + ' Спустить из в 0?' +
+    
+    
+    
     
     
     ' 0 - Отмена\n\n '))
@@ -205,7 +207,7 @@ def cmd_a():
         if n < int(uboat.tanks['different1']['Capacity']['curr'] + 1):
             #uboat.tanks['different1']['Capacity']['curr'] -= n
             # трата воздуха на продувку 
-            wtr_out = n/3
+            wtr_out = n
             uboat.Baloon.vvd_wtr_out(wtr_out, n, uboat.tanks['different1']['Capacity']['curr'])
          
         else:
@@ -213,6 +215,11 @@ def cmd_a():
         
     elif i == 3:
         rpt_R2()
+        
+    elif i == 4:
+        uboat.baloon_vvd[0].taken = 0
+        uboat.baloon_vvd[1].taken = 0
+        
         
     elif i == 0:
         print('Отмена действия.')
