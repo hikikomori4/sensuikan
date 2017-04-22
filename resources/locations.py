@@ -199,7 +199,7 @@ def tanks_operate(tankname, tankmax, tankcurr ):
             print(n,'!!!')
             tankcurr += n
             print('В цистерну принято ' + str(n) + ' тонн. Сейчас в ней ' + str(tankcurr) + ' тонн заботной воды.')
-            return (tankcurr)
+            return tankcurr
         else:
             print('Нельзя принять больше объёма цистерны!')
         
