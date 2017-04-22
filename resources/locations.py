@@ -168,18 +168,17 @@ def cmd_5():
            
     
 #######################################################################
-# 
+# Заполнение и продувка балластных цистерн
 #######################################################################
 
 def tanks_operate(tankname, tankmax, tankcurr ):    
     print('\n            ' + c_drk + '* * *' + c_nrm + '\n') 
     print(tankname + '\n')
     
-
     print('Воздуха в каждом из баллонов ВВД: ', end ='')
     for i in range(14):
         print(uboat.baloon_vvd[i].taken, end= ',')
-    print()
+    print('\nВсего запасов ВВД: ' + str(uboat.vvd_all),'\n')
     
     if tankcurr == 0:
         print('Цистерна пуста. Можно принять до ' + str(tankmax) + ' тонн.')
@@ -188,22 +187,24 @@ def tanks_operate(tankname, tankmax, tankcurr ):
     else:
         print('В цистерну принято '+ str(tankcurr) +' тонн забортной воды из ' + str(tankmax) + ' возможных.')
     
-    print('Всего запасов ВВД: ' + str(uboat.vvd_all))
-    
     i = int(input('\n' +
     ' 1 - Принять воду в цистерну\n' +
     ' 2 - Откачать воду воздухом высокого давления\n' + 
     ' 0 - Отмена\n\n '))
-         
+    # -------------------------------------------------------------     
     if i == 1:
         n = int(input('Сколько тонн воды принять? '))
-        if n < (tankmax - tankcurr + 1):
+
+        if n < int((tankmax - tankcurr + 1)):
+            print(n,'!!!')
             tankcurr += n
-            print('В цистерну принято ' + str(n) + ' тонн.')
-            
+            print('В цистерну принято ' + str(n) + ' тонн. Сейчас в ней ' + str(tankcurr) + ' тонн заботной воды.')
+            return (tankcurr)
         else:
             print('Нельзя принять больше объёма цистерны!')
-            
+        
+
+    # -------------------------------------------------------------     
     elif i == 2:
         n = int(input('Сколько тонн воды откачать? '))
         if n < int(tankcurr + 1):
@@ -220,26 +221,35 @@ def tanks_operate(tankname, tankmax, tankcurr ):
                     else:
                         continue
                     tankcurr = str(ctank)
-                    return tankcurr
                     
                 else:
                     break
-                
-         
         else:
             print('Нельзя откачать воды больше, чем есть в цистерне!')
+    # -------------------------------------------------------------     
         
     elif i == 0:
         print('Отмена действия.')
+    
 
-
+    
 #######################################################################
 
 def cmd_a():
-    tankname = uboat.tanks['different1']['name']
-    tankmax = uboat.tanks['different1']['Capacity']['max']
-    tankcurr = uboat.tanks['different1']['Capacity']['curr']
-    tanks_operate(tankname, tankmax, tankcurr)
+    uboat.tanks['different1']['Capacity']['curr'] = 200
+    tanks_operate(
+        uboat.tanks['different1']['name'],
+        uboat.tanks['different1']['Capacity']['max'],
+        uboat.tanks['different1']['Capacity']['curr']
+    )
+    print('ИТОГО прибавилось ли водички? ', uboat.tanks['different1']['Capacity']['curr'])
+    
+    
+    
+#    uboat.tanks['different1']['Capacity']['curr'] = tankcurr
+
+   # print('После2 tankmax: ', tankmax)
+    #print('После2 tankcurr2: ', tankcurr2)
 
 def cmd_b(): 
     tankname = uboat.tanks['different2']['name']
@@ -478,9 +488,6 @@ def queryaction2(m_actions, m_text):
     
     else:
         print('\nНеизвестная команда.\n')
-
-
-
 #########################################################
 
 
