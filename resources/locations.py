@@ -1,14 +1,16 @@
 #!/usr/bin/python3
 # coding: utf-8
 
-from resources import uboat, sea
+from resources import uboat, sea, physics, encounters
 
 if __name__ == '__main__':
     print('Модуль отдельно не запускается!')
 
 
 
+
 import os
+
 def cls():
     try:
         os.system('clear')
@@ -30,6 +32,10 @@ c_nrm = '\x1b\x5b\x30\x6d'
 def dummy():
     print('Пусто пока...')
 
+
+
+
+
 def commands():
     print('\n            ' + c_drk + '* * *' + c_nrm + '\n')
 
@@ -50,6 +56,8 @@ def commands():
     c - Уравнительная цистерна.
     d - Цистерна быстрого погружения.
     e - Цистерна главного балласта (ЦГБ)
+    z - Срочное погружение! Заполнить цистерны: НД, КД, БП, ГБ! 
+    x - Аварийное всплытие! Продуть ВСЕ цистерны!
     
     0 - Отмена
 
@@ -69,6 +77,8 @@ def commands():
          'c': cmd_c,
          'd': cmd_d,
          'e': cmd_e,
+         'z': cmd_z,
+         'x': cmd_x,
          '0': cmd_0
     }
     queryaction2(m_actions, m_text)
@@ -175,10 +185,15 @@ def tanks_operate(tankname, tankmax, tankcurr ):
     print('\n            ' + c_drk + '* * *' + c_nrm + '\n') 
     print(tankname + '\n')
     
-    print('Воздуха в каждом из баллонов ВВД: ', end ='')
+    print('Воздуха в каждом из баллонов ВВД: \n')
     for i in range(14):
         print(uboat.baloon_vvd[i].taken, end= ',')
-    print('\nВсего запасов ВВД: ' + str(uboat.vvd_all),'\n')
+    
+    vvd_all = 0
+    for i in range(14):
+        vvd_all += int(uboat.baloon_vvd[i].taken)
+
+    print('\nВсего запасов ВВД: ' + str(vvd_all),'\n')
     
     if tankcurr == 0:
         print('Цистерна пуста. Можно принять до ' + str(tankmax) + ' тонн.')
@@ -193,37 +208,36 @@ def tanks_operate(tankname, tankmax, tankcurr ):
     ' 0 - Отмена\n\n '))
     # -------------------------------------------------------------     
     if i == 1:
-        n = int(input('Сколько тонн воды принять? '))
+        n = int(input('\nСколько тонн воды принять? '))
 
         if n < int((tankmax - tankcurr + 1)):
-            print(n,'!!!')
             tankcurr += n
             print('В цистерну принято ' + str(n) + ' тонн. Сейчас в ней ' + str(tankcurr) + ' тонн заботной воды.')
-            return tankcurr
+            global tmp
+            tmp = tankcurr
+            
         else:
             print('Нельзя принять больше объёма цистерны!')
         
 
     # -------------------------------------------------------------     
     elif i == 2:
-        n = int(input('Сколько тонн воды откачать? '))
+        n = int(input('Сколько тонн воды откачать? ')) # Проверка не превышает ли запрос имеющуюся воду
         if n < int(tankcurr + 1):
-            #tankcurr -= n
-            # трата воздуха на продувку 
-            
             for i in range(14):
                                                     # Если в баллоне больше, чем запрашиваемый объём
                 if uboat.baloon_vvd[i].taken > n:   
-                    uboat.baloon_vvd[i].taken -= n  # то из этого баллона вычитается требуемое
-                    ctank -= n                      # объём воды в цистерне уменьшается
-                    if uboat.baloon_vvd[i].taken > n:
-                        uboat.baloon_vvd[i].taken -= (n)    # объём запасов ВВД уменьшается
-                    else:
-                        continue
-                    tankcurr = str(ctank)
+                    uboat.baloon_vvd[i].taken -= n  # Расход ВВД
+                    break
                     
                 else:
-                    break
+                    continue
+            tankcurr -= n                      # вытеснение воды из танка
+            global tmp
+            tmp = tankcurr
+            print('Из цистерны продуто ' + str(n) + ' тонн. Сейчас в ней осталось ' + str(tankcurr) + ' тонн заботной воды.')
+
+
         else:
             print('Нельзя откачать воды больше, чем есть в цистерне!')
     # -------------------------------------------------------------     
@@ -231,52 +245,104 @@ def tanks_operate(tankname, tankmax, tankcurr ):
     elif i == 0:
         print('Отмена действия.')
     
-
+    return tmp
+    
     
 #######################################################################
 
 def cmd_a():
-    uboat.tanks['different1']['Capacity']['curr'] = 200
     tanks_operate(
         uboat.tanks['different1']['name'],
         uboat.tanks['different1']['Capacity']['max'],
-        uboat.tanks['different1']['Capacity']['curr']
-    )
-    print('ИТОГО прибавилось ли водички? ', uboat.tanks['different1']['Capacity']['curr'])
-    
-    
-    
-#    uboat.tanks['different1']['Capacity']['curr'] = tankcurr
-
-   # print('После2 tankmax: ', tankmax)
-    #print('После2 tankcurr2: ', tankcurr2)
+        uboat.tanks['different1']['Capacity']['curr'] )
+    uboat.tanks['different1']['Capacity']['curr'] = tmp
 
 def cmd_b(): 
-    tankname = uboat.tanks['different2']['name']
-    tankmax = uboat.tanks['different2']['Capacity']['max']
-    tankcurr = uboat.tanks['different2']['Capacity']['curr']
-    tanks_operate(tankname, tankmax, tankcurr)
-    
+    tanks_operate(
+        uboat.tanks['different2']['name'],
+        uboat.tanks['different2']['Capacity']['max'],
+        uboat.tanks['different2']['Capacity']['curr'] )
+    uboat.tanks['different2']['Capacity']['curr'] = tmp
+
           
 def cmd_c(): 
-    tankname = uboat.tanks['equalizing']['name']
-    tankmax = uboat.tanks['equalizing']['Capacity']['max']
-    tankcurr = uboat.tanks['equalizing']['Capacity']['curr']
-    tanks_operate(tankname, tankmax, tankcurr)
+    tanks_operate(
+        uboat.tanks['equalizing']['name'],
+        uboat.tanks['equalizing']['Capacity']['max'],
+        uboat.tanks['equalizing']['Capacity']['curr'] )
+    uboat.tanks['equalizing']['Capacity']['curr'] = tmp
+
     
          
-def cmd_d(): 
-    tankname = uboat.tanks['quickdive']['name']
-    tankmax = uboat.tanks['quickdive']['Capacity']['max']
-    tankcurr = uboat.tanks['quickdive']['Capacity']['curr']
-    tanks_operate(tankname, tankmax, tankcurr)
+def cmd_d():
+    tanks_operate(
+        uboat.tanks['quickdive']['name'],
+        uboat.tanks['quickdive']['Capacity']['max'],
+        uboat.tanks['quickdive']['Capacity']['curr'] )
+    uboat.tanks['quickdive']['Capacity']['curr'] = tmp   
+
     
           
 def cmd_e(): 
-    tankname = uboat.tanks['mainballast']['name']
-    tankmax = uboat.tanks['mainballast']['Capacity']['max']
-    tankcurr = uboat.tanks['mainballast']['Capacity']['curr']
-    tanks_operate(tankname, tankmax, tankcurr)
+    tanks_operate(
+        uboat.tanks['mainballast']['name'],
+        uboat.tanks['mainballast']['Capacity']['max'],
+        uboat.tanks['mainballast']['Capacity']['curr'] )
+    uboat.tanks['mainballast']['Capacity']['curr'] = tmp
+
+
+
+def cmd_z(): 
+    
+    print(c_bld + c_und +'\nВнимание! Боевая тревога! Срочное погружение!\n' + c_nrm)
+    print('Полностью заполняются балластные цистерны:\n\n  ' + uboat.tanks['mainballast']['name'])
+    print('  ' + uboat.tanks['different1']['name'])
+    print('  ' + uboat.tanks['different2']['name'])
+    print('  ' + uboat.tanks['equalizing']['name'])
+    print('\nКроме:\n\n  ' + uboat.tanks['quickdive']['name'] + '\n')
+    
+   
+    
+    uboat.tanks['mainballast']['Capacity']['curr'] = uboat.tanks['mainballast']['Capacity']['max'] 
+    uboat.tanks['different1']['Capacity']['curr'] = uboat.tanks['different1']['Capacity']['max'] 
+    uboat.tanks['different2']['Capacity']['curr'] = uboat.tanks['different2']['Capacity']['max'] 
+    uboat.tanks['equalizing']['Capacity']['curr'] = uboat.tanks['equalizing']['Capacity']['max'] 
+
+
+def cmd_x(): 
+
+    print(c_bld + c_und +'\nВнимание! Боевая тревога! Аварийное всплытие!\n' + c_nrm)
+    print('Будут продуты все цистерны без исключения!\n\n')
+
+    tnks =    ( uboat.tanks['mainballast']['Capacity']['curr'],
+                uboat.tanks['different1']['Capacity']['curr'],
+                uboat.tanks['different2']['Capacity']['curr'],
+                uboat.tanks['equalizing']['Capacity']['curr'],
+                uboat.tanks['quickdive']['Capacity']['curr']  )
+
+    for o in  tnks:
+
+        for i in range(14):
+                                                # Если в баллоне больше, чем запрашиваемый объём
+            print('.', end='')
+            if uboat.baloon_vvd[i].taken > o:
+                uboat.baloon_vvd[i].taken -= o  # Расход ВВД
+                tnks = 0
+                break
+                
+            else:
+                continue
+    
+    print('\nОстаток воздуха в каждом из баллонов ВВД: \n')
+    for i in range(14):
+        print(uboat.baloon_vvd[i].taken, end= ' ')
+    print('\n')
+
+
+    #if uboat.subsea > sum(tnks):
+        #print('Плохие новости... У нас нехватает запасов ВВД,\n' + \
+            #'чтобы всплыть. Но... возможно ещё не все потеряно, если\n' + \
+            #'попробовать продуть ЦГБ остатками вручную, и всплыть на рулях.\n')
     
           
 def cmd_0(): 
@@ -327,13 +393,13 @@ def rpt_r():
     print('\n       '+c_drk+'* * *'+c_nrm+'\n\n' + \
     '\nВаши текущие координаты на карте: x = {}, y = {}, глубина = {}.\nСкорость: {} узлов.' \
     .format(uboat.c_coord[0], uboat.c_coord[1],uboat.c_coord[2], uboat.speed))
-    
+
     if uboat.c_differ == 0:
-        c_differ = 'отсутствует'
+        c_differ_t = 'отсутствует'
     elif uboat.c_differ > 0:
-        c_differ = 'на нос ' + str(uboat.c_differ) + ' градус(а)'
+        c_differ_t = 'на нос ' + str(uboat.c_differ) + ' градус(а)'
     elif uboat.c_differ < 0:
-        c_differ = 'на корму ' + str(uboat.c_differ) + ' градус(а)'
+        c_differ_t = 'на корму ' + str(uboat.c_differ) + ' градус(а)'
 
     if uboat.c_kren == 0:
         c_kren = 'отсутствует'
@@ -342,7 +408,7 @@ def rpt_r():
     elif uboat.c_kren < 0:
         c_kren = 'на левый борт ' + str(uboat.c_kren) + ' градус(а)'
     
-    print('\nДифферент ' + c_differ + '. ' + 'Крен ' + c_kren + '.\n' )
+    print('\nДифферент ' + c_differ_t + '. ' + 'Крен ' + c_kren + '.\n' )
     
     if uboat.v_rule == 0:
         v_rule = 'прямо по курсу'
@@ -387,14 +453,15 @@ def rpt_c():
 def rpt_R1():
     print('\n            ' + c_drk + '* * *' + c_nrm + '\n')
     print('Рапорт по балластным и топливным цистернам:\n')
-    for ii in ('different1', 'different2', 'equalizing', 'quickdive', 'mainballast', 'torpedorshaped1', 'torpedorshaped2', 'fuel_tank1', 'fuel_tank2'):
-        print(uboat.tanks[ii]['name'] + '. Состояние: ' + uboat.tanks[ii]['state'] + c_drk + \
-        '\nобъём: ' + str(uboat.tanks[ii]['Capacity']['max']) + \
-        ', принято: ' + str(uboat.tanks[ii]['Capacity']['curr']) + ' тонн.\n' + c_nrm) 
+    for ii in ('different1', 'different2', 'equalizing', 'quickdive', 
+                'mainballast', 'torpedorshaped1', 'torpedorshaped2', 
+                'fuel_tank1', 'fuel_tank2'):
+        print(uboat.tanks[ii]['name'].ljust(32) +' ' + c_drk +  \
+        uboat.tanks[ii]['state'] + ', объём: ' + str(uboat.tanks[ii]['Capacity']['max']) + \
+        ', принято: ' + str(uboat.tanks[ii]['Capacity']['curr']) + ' тонн.' + c_nrm) 
          
         
     
-
         
 
 #R2 - баллонам воздуха высокого давления
@@ -461,11 +528,21 @@ def printloc(curr_loc, curr_desc):
     
 
 def queryaction(m_actions, m_text, m_locat):
+
     while True:
         
         printloc(m_locat[0], m_locat[1])
         
-        print(m_text, end='')
+        #  =====================================
+        #  Каждый цикл отображения меню вызывает
+        #  обработчики игровой физики и событий
+        #  =====================================
+        
+        physics.uboatf()      
+        encounters.onboard()  
+        
+        
+        print('\n', m_text, end='')
         cmd = input(' ')
         menuact = m_actions.get(cmd)
     

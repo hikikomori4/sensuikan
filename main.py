@@ -10,7 +10,10 @@
 import os
 import sys
 import shutil
-from resources import sea, uboat, locations
+
+# from resources import sea, uboat, locations
+
+from resources import uboat, sea, locations, physics, encounters
 
 
 
@@ -30,7 +33,6 @@ def print_c(line):
 
 
 def game_begin():
-    cls()
     print_c('\nНачало\n')
     locations.loc_bridge()
 
@@ -45,6 +47,15 @@ def game_save():
 
 def instruction():
     print('Описание игры....')
+    print('''
+    
+    Картинка продольного разреза подводной лодки лодки "Средняя", серия IX-бис.'
+    http://www.deepstorm.ru/DeepStorm.files/17-45/c%20IX/9-1.jpg
+    
+    ''')
+    
+
+    
    
 def game_exit():
     print('\nЗавершение программы...\n')
@@ -70,31 +81,19 @@ r"""
  -'   `-'   `-'   `-'   `-'   `-'   `-'   `-'   `-'   `-'   `-""")
     
     print('''
- b) Начать новую игру
- r) Вернуться в текущую
- l) Загрузить игру
- s) Сохранить игру
- i) Инструкции
- q) Выйти из игры
- 
-    ''')
-    # print(uboat.compartments['mainballast']['Capacity']['max'])
-    #print(uboat.compartments[2]['desc'])
-    #print(uboat.compartments[4]['truim'])
-    # print(uboat.battery1)
-    #print(uboat.elmotor['rpm'])
-    #print(uboat.compartments[1]['name'])
+ 1) Начать новую игру   2) Инструкции   q) Выйти из игры
+''')
     
 
      
 
    
 actions = {
-    'b': game_begin,
+    '1': game_begin,
     'r': game_back,
     'l': game_load,
     's': game_save,
-    'i': instruction,
+    '2': instruction,
     'm': show_mainmenu,
     'q': game_exit
     }
@@ -102,7 +101,7 @@ actions = {
 
 if __name__== '__main__':
     show_mainmenu()
-
+    
     while True:
         cmd = input('Ваша команда? > ')
         action = actions.get(cmd)

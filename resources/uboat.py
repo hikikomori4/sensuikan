@@ -5,21 +5,22 @@ import random
 
 if __name__ == '__main__':
     print('\nМодуль субмарина отдельно не запускается!\n')
-    exit(1)
-
-
+    exit(0)
 
 
 uboatname = 'Тип "С" Средняя'
 uboatseries = 'IX-бис'
 
-c_coord = [250,50,0]
+c_coord = [250,50,1]
 c_differ = 0
 c_kren = 0
 v_rule = 0
 h_rule1 = 0
 h_rule2 = 0
 speed  = 0
+
+waterloaded = 0
+
 
 ########################################################
 
@@ -136,6 +137,27 @@ tanks = {
         }
     }
 
+
+
+cruiser = tanks['quickdive']['Capacity']['max']
+
+position = tanks['mainballast']['Capacity']['max'] \
+            + tanks['different1']['Capacity']['max'] \
+            + tanks['different2']['Capacity']['max'] \
+
+subsea = tanks['mainballast']['Capacity']['max'] \
+            + tanks['different1']['Capacity']['max'] \
+            + tanks['different2']['Capacity']['max'] \
+            + tanks['equalizing']['Capacity']['max'] 
+
+
+PSCOPE_DEEP = -10
+SAFE_DEEP = -25
+WORK_DEEP = -70
+MAX_DEEP = -100
+CALC_DEEP = -120
+
+
 ########################################################
 #
 # Баллоны запаса ВВД
@@ -171,13 +193,7 @@ baloon_vvd = [
     Baloon(3000, 3000-random.randrange(100), BALOON_VVD_OK) for i in range(14)
     ]
 
-
-# Вычисление суммарного запаса ВВД:
-
-vvd_all = 0
-for i in range(14):
-    vvd_all += baloon_vvd[i].taken
-    
+ 
 
 
 ########################################################
