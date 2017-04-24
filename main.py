@@ -54,8 +54,6 @@ def instruction():
     
     ''')
     
-
-    
    
 def game_exit():
     print('\nЗавершение программы...\n')

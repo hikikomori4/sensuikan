@@ -17,6 +17,7 @@ def cls():
     except:
         os.system('cls')
 
+# c_inv c_bld c_drk c_und c_nrm
 
 c_inv  = '\x1b\x5b\x37\x6d'
 c_bld = '\x1b\x5b\x31\x6d'
@@ -51,11 +52,12 @@ def commands():
     5 - Электрических
     
         Продувка и приём забортной воды:
-    a - Носовая дифферентная цистерна.
-    b - Кормовая дифферентная цистерна.
-    c - Уравнительная цистерна.
-    d - Цистерна быстрого погружения.
-    e - Цистерна главного балласта (ЦГБ)
+        
+    a - Носовая дифферентная цистерна    (''' + str(uboat.tanks['different1']['Capacity']['curr']) + ' из ' + str(uboat.tanks['different1']['Capacity']['max']) + ' т.)' + '''
+    b - Кормовая дифферентная цистерна   (''' + str(uboat.tanks['different2']['Capacity']['curr']) + ' из ' + str(uboat.tanks['different2']['Capacity']['max']) + ' т.)' + '''
+    c - Уравнительная цистерна           (''' + str(uboat.tanks['equalizing']['Capacity']['curr']) + ' из ' + str(uboat.tanks['equalizing']['Capacity']['max']) + ' т.)' + '''
+    d - Цистерна быстрого погружения     (''' + str(uboat.tanks['quickdive']['Capacity']['curr']) + ' из ' + str(uboat.tanks['quickdive']['Capacity']['max']) + ' т.)' + '''
+    e - Цистерна главного балласта (ЦГБ) (''' + str(uboat.tanks['mainballast']['Capacity']['curr']) + ' из ' + str(uboat.tanks['mainballast']['Capacity']['max']) + ' т.)' + '''
     z - Срочное погружение! Заполнить цистерны: НД, КД, БП, ГБ! 
     x - Аварийное всплытие! Продуть ВСЕ цистерны!
     
@@ -208,6 +210,9 @@ def tanks_operate(tankname, tankmax, tankcurr ):
     ' 0 - Отмена\n\n '))
     # -------------------------------------------------------------     
     if i == 1:
+        
+        # 666
+        
         n = int(input('\nСколько тонн воды принять? '))
 
         if n < int((tankmax - tankcurr + 1)):
@@ -251,6 +256,11 @@ def tanks_operate(tankname, tankmax, tankcurr ):
 #######################################################################
 
 def cmd_a():
+
+    if uboat.READY_TO_DEEP is False:
+        print(uboat.text_notreadytodeep)
+        return
+    
     tanks_operate(
         uboat.tanks['different1']['name'],
         uboat.tanks['different1']['Capacity']['max'],
@@ -258,23 +268,35 @@ def cmd_a():
     uboat.tanks['different1']['Capacity']['curr'] = tmp
 
 def cmd_b(): 
+
+    if uboat.READY_TO_DEEP is False:
+        print(uboat.text_notreadytodeep)
+        return
+    
     tanks_operate(
         uboat.tanks['different2']['name'],
         uboat.tanks['different2']['Capacity']['max'],
         uboat.tanks['different2']['Capacity']['curr'] )
     uboat.tanks['different2']['Capacity']['curr'] = tmp
 
-          
 def cmd_c(): 
+
+    if uboat.READY_TO_DEEP is False:
+        print(uboat.text_notreadytodeep)
+        return
+    
     tanks_operate(
         uboat.tanks['equalizing']['name'],
         uboat.tanks['equalizing']['Capacity']['max'],
         uboat.tanks['equalizing']['Capacity']['curr'] )
     uboat.tanks['equalizing']['Capacity']['curr'] = tmp
 
-    
-         
 def cmd_d():
+
+    if uboat.READY_TO_DEEP is False:
+        print(uboat.text_notreadytodeep)
+        return
+    
     tanks_operate(
         uboat.tanks['quickdive']['name'],
         uboat.tanks['quickdive']['Capacity']['max'],
@@ -284,17 +306,24 @@ def cmd_d():
     
           
 def cmd_e(): 
+
+    if uboat.READY_TO_DEEP is False:
+        print(uboat.text_notreadytodeep)
+        return
+    
     tanks_operate(
         uboat.tanks['mainballast']['name'],
         uboat.tanks['mainballast']['Capacity']['max'],
         uboat.tanks['mainballast']['Capacity']['curr'] )
     uboat.tanks['mainballast']['Capacity']['curr'] = tmp
 
-
-
 def cmd_z(): 
-    
-    print(c_bld + c_und +'\nВнимание! Боевая тревога! Срочное погружение!\n' + c_nrm)
+
+    if uboat.READY_TO_DEEP is False:
+        print(uboat.text_notreadytodeep)
+        return
+
+    print(c_bld + c_und +'\nВнимание! Всем вниз! Боевая тревога! Срочное погружение!\n' + c_nrm)
     print('Полностью заполняются балластные цистерны:\n\n  ' + uboat.tanks['mainballast']['name'])
     print('  ' + uboat.tanks['different1']['name'])
     print('  ' + uboat.tanks['different2']['name'])
@@ -312,27 +341,28 @@ def cmd_z():
 def cmd_x(): 
 
     print(c_bld + c_und +'\nВнимание! Боевая тревога! Аварийное всплытие!\n' + c_nrm)
-    print('Будут продуты все цистерны без исключения!\n\n')
+    print('Будут продуты все цистерны без исключения!')
 
-    tnks =    ( uboat.tanks['mainballast']['Capacity']['curr'],
-                uboat.tanks['different1']['Capacity']['curr'],
-                uboat.tanks['different2']['Capacity']['curr'],
-                uboat.tanks['equalizing']['Capacity']['curr'],
-                uboat.tanks['quickdive']['Capacity']['curr']  )
+    tnks = ['mainballast', 'different1', 'different2', 'equalizing', 'quickdive']
 
-    for o in  tnks:
+    for o in tnks:
 
         for i in range(14):
                                                 # Если в баллоне больше, чем запрашиваемый объём
             print('.', end='')
-            if uboat.baloon_vvd[i].taken > o:
-                uboat.baloon_vvd[i].taken -= o  # Расход ВВД
-                tnks = 0
+            if uboat.baloon_vvd[i].taken > uboat.tanks[o]['Capacity']['curr']:
+                uboat.baloon_vvd[i].taken -= uboat.tanks[o]['Capacity']['curr']  # Расход ВВД
+                uboat.tanks[o]['Capacity']['curr'] = 0 # продувка цистерны
                 break
                 
             else:
                 continue
     
+
+    print('\n')
+    for o in tnks:
+        print(str(uboat.tanks[o]['name']) + ': ' + str(uboat.tanks[o]['Capacity']['curr']) + ' тонн воды.' )
+
     print('\nОстаток воздуха в каждом из баллонов ВВД: \n')
     for i in range(14):
         print(uboat.baloon_vvd[i].taken, end= ' ')
@@ -510,7 +540,7 @@ def rpt_0():
     
 def look():
     globals() # Получение глобальных переменных 
-    print('\n'+curr_desc2+'\n') 
+    print('\n'+curr_desc2+'') 
  
 def printloc(curr_loc, curr_desc):
     
@@ -550,7 +580,7 @@ def queryaction(m_actions, m_text, m_locat):
             menuact()
             
         else:
-            print('\nНеизвестная команда.')
+            print('' , end ='')
             queryaction(m_actions, m_text, m_locat)
 
 
@@ -570,6 +600,13 @@ def queryaction2(m_actions, m_text):
 
 
 def loc_bridge():
+    
+    if uboat.c_coord[2] < 0:
+        print('\nВНИМАНИЕ!\n\nВы не можете покинуть прочный корпус и выйти на мостик под водой.' + \
+        '\nСперва следует всплыть.')
+        return
+
+    uboat.READY_TO_DEEP = False
     m_locat = (uboat.bridge[0]['name'], uboat.bridge[0]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Спуститься в рубку, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
@@ -582,6 +619,7 @@ def loc_bridge():
 
 def loc_0():
 
+    uboat.READY_TO_DEEP = True
     m_locat = (uboat.compartments[0]['name'], uboat.compartments[0]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Спуститься в 3й отсек, '+c_inv+'2'+c_nrm+'-Подняться на мостик, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
@@ -595,6 +633,7 @@ def loc_0():
     
 def loc_1():
 
+    uboat.READY_TO_DEEP = True
     m_locat = (uboat.compartments[1]['name'], uboat.compartments[1]['desc'])
     m_text = c_inv+'2'+c_nrm+'-Перейти во 2й отсек, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
@@ -607,6 +646,7 @@ def loc_1():
 
 def loc_2():
 
+    uboat.READY_TO_DEEP = True
     m_locat = (uboat.compartments[2]['name'], uboat.compartments[2]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти в 1й отсек, '+c_inv+'2'+c_nrm+'-Перейти в 3й отсек, '+c_inv+'C'+c_nrm+'-В каюту командира, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
@@ -621,6 +661,7 @@ def loc_2():
 
 def loc_2c():
 
+    uboat.READY_TO_DEEP = True
     m_locat = (uboat.cpt_cabin[0]['name'], uboat.cpt_cabin[0]['desc'])
     m_text = c_inv+'2'+c_nrm+'-Выйти из каюты, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
@@ -633,6 +674,7 @@ def loc_2c():
 
 def loc_3():
 
+    uboat.READY_TO_DEEP = True
     m_locat = (uboat.compartments[3]['name'], uboat.compartments[3]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти во 2й отсек, '+c_inv+'2'+c_nrm+'-Перейти в 4й отсек, '+c_inv+'3'+c_nrm+'-Подняться в боевую рубку, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
@@ -647,6 +689,7 @@ def loc_3():
 
 def loc_4():
 
+    uboat.READY_TO_DEEP = True
     m_locat = (uboat.compartments[4]['name'], uboat.compartments[4]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти в 3й отсек, '+c_inv+'2'+c_nrm+'-Перейти в 5й отсек, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
@@ -660,6 +703,7 @@ def loc_4():
 
 def loc_5():
 
+    uboat.READY_TO_DEEP = True
     m_locat = (uboat.compartments[5]['name'], uboat.compartments[5]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти в 4й отсек, '+c_inv+'2'+c_nrm+'-Перейти в 6й отсек, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
@@ -673,6 +717,7 @@ def loc_5():
 
 def loc_6():
 
+    uboat.READY_TO_DEEP = True
     m_locat = (uboat.compartments[6]['name'], uboat.compartments[6]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти в 5й отсек, '+c_inv+'2'+c_nrm+'-Перейти в 7й отсек, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {
@@ -686,6 +731,7 @@ def loc_6():
 
 def loc_7():
 
+    uboat.READY_TO_DEEP = True
     m_locat = (uboat.compartments[7]['name'], uboat.compartments[7]['desc'])
     m_text = c_inv+'1'+c_nrm+'-Перейти в 6й отсек, '+c_inv+'S'+c_nrm+'-Отдать команду, '+c_inv+'R'+c_nrm+'-Запросить рапорт, '+c_inv+'L'+c_nrm+'-Осмотреться'
     m_actions = {

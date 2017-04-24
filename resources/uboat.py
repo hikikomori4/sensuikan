@@ -20,7 +20,12 @@ h_rule2 = 0
 speed  = 0
 
 waterloaded = 0
+underwaterpressure = 0
 
+
+fixingfloat = False
+
+seadensity = 0
 
 ########################################################
 
@@ -156,6 +161,16 @@ SAFE_DEEP = -25
 WORK_DEEP = -70
 MAX_DEEP = -100
 CALC_DEEP = -120
+
+READY_TO_DEEP = True
+
+c_und = '\x1b\x5b\x34\x6d'
+c_nrm = '\x1b\x5b\x30\x6d'
+
+text_notreadytodeep = '\n' + c_und + 'ВНИМАНИЕ!' + c_nrm + \
+'\n\nВо избежание самозатопления все операции с цистернами следует ' + \
+'проводить\nтолько внутри прочного корпуса при задраенном рубочном люке!'
+
 
 
 ########################################################
