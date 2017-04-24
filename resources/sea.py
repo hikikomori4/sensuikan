@@ -26,6 +26,24 @@ with open(filename, newline='') as f:
 
 
 
+#polygon1 =()
+#for coord in sea:
+    
+    #coordprev = str(coord)
+    #next
+    #if coordprev[2] == str(coord[2]):
+        #polygon1 += tuple(coordprev)
+
+
+#print(polygon1)
+    
+    #if int(coord[0]) < uboat.c_coord[0]:
+        #print(uboat.c_coord[0] - int(coord[0]))
+    #elif int(coord[0]) > uboat.c_coord[0]:
+        #print(int(coord[0]) - uboat.c_coord[0])
+
+
+
 
 
 

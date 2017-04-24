@@ -567,6 +567,7 @@ def queryaction(m_actions, m_text, m_locat):
         cmd = input(' ')
         menuact = m_actions.get(cmd)
     
+        
         if menuact:
             menuact()
             
