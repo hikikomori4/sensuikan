@@ -529,7 +529,9 @@ def rpt_0():
     
 def look():
     globals() # Получение глобальных переменных 
-    print('\n'+curr_desc2+'') 
+    uboat.ascii_plan()
+    print('\n'+curr_desc2+'', end='') 
+    
  
 def printloc(curr_loc, curr_desc):
     
