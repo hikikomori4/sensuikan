@@ -211,15 +211,12 @@ def tanks_operate(tankname, tankmax, tankcurr ):
     # -------------------------------------------------------------     
     if i == 1:
         
-        # 666
-        
         n = int(input('\nСколько тонн воды принять? '))
 
         if n < int((tankmax - tankcurr + 1)):
             tankcurr += n
             print('В цистерну принято ' + str(n) + ' тонн. Сейчас в ней ' + str(tankcurr) + ' тонн заботной воды.')
-            global tmp
-            tmp = tankcurr
+            return tankcurr
             
         else:
             print('Нельзя принять больше объёма цистерны!')
@@ -238,9 +235,8 @@ def tanks_operate(tankname, tankmax, tankcurr ):
                 else:
                     continue
             tankcurr -= n                      # вытеснение воды из танка
-            global tmp
-            tmp = tankcurr
             print('Из цистерны продуто ' + str(n) + ' тонн. Сейчас в ней осталось ' + str(tankcurr) + ' тонн заботной воды.')
+            return tankcurr
 
 
         else:
@@ -250,7 +246,6 @@ def tanks_operate(tankname, tankmax, tankcurr ):
     elif i == 0:
         print('Отмена действия.')
     
-    return tmp
     
     
 #######################################################################
@@ -261,11 +256,10 @@ def cmd_a():
         print(uboat.text_notreadytodeep)
         return
     
-    tanks_operate(
+    uboat.tanks['different1']['Capacity']['curr'] = tanks_operate(
         uboat.tanks['different1']['name'],
         uboat.tanks['different1']['Capacity']['max'],
         uboat.tanks['different1']['Capacity']['curr'] )
-    uboat.tanks['different1']['Capacity']['curr'] = tmp
 
 def cmd_b(): 
 
@@ -273,11 +267,10 @@ def cmd_b():
         print(uboat.text_notreadytodeep)
         return
     
-    tanks_operate(
+    uboat.tanks['different2']['Capacity']['curr'] = tanks_operate(
         uboat.tanks['different2']['name'],
         uboat.tanks['different2']['Capacity']['max'],
         uboat.tanks['different2']['Capacity']['curr'] )
-    uboat.tanks['different2']['Capacity']['curr'] = tmp
 
 def cmd_c(): 
 
@@ -285,11 +278,10 @@ def cmd_c():
         print(uboat.text_notreadytodeep)
         return
     
-    tanks_operate(
+    uboat.tanks['equalizing']['Capacity']['curr'] = tanks_operate(
         uboat.tanks['equalizing']['name'],
         uboat.tanks['equalizing']['Capacity']['max'],
         uboat.tanks['equalizing']['Capacity']['curr'] )
-    uboat.tanks['equalizing']['Capacity']['curr'] = tmp
 
 def cmd_d():
 
@@ -297,13 +289,10 @@ def cmd_d():
         print(uboat.text_notreadytodeep)
         return
     
-    tanks_operate(
+    uboat.tanks['quickdive']['Capacity']['curr'] = tanks_operate(
         uboat.tanks['quickdive']['name'],
         uboat.tanks['quickdive']['Capacity']['max'],
         uboat.tanks['quickdive']['Capacity']['curr'] )
-    uboat.tanks['quickdive']['Capacity']['curr'] = tmp   
-
-    
           
 def cmd_e(): 
 
@@ -311,11 +300,11 @@ def cmd_e():
         print(uboat.text_notreadytodeep)
         return
     
-    tanks_operate(
+    uboat.tanks['mainballast']['Capacity']['curr'] = tanks_operate(
         uboat.tanks['mainballast']['name'],
         uboat.tanks['mainballast']['Capacity']['max'],
         uboat.tanks['mainballast']['Capacity']['curr'] )
-    uboat.tanks['mainballast']['Capacity']['curr'] = tmp
+
 
 def cmd_z(): 
 
